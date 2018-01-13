@@ -46,7 +46,7 @@ def getNeighbors(node, grid):
     potential = [Cell(r-1,c),Cell(r+1,c),Cell(r,c-1),Cell(r,c+1)]
     neighbors = [cell for cell in potential if isValidAndNotAWall(cell, grid)]
     for n in neighbors:
-        n.g = node.g + 1
+        n.g = node.g + .5*grid[node.row][node.col] + .5*grid[n.row][n.col]
         n.parent = node
         
     return neighbors
@@ -100,7 +100,7 @@ def gridVal(char):
     else:
         return int(char)
 
-fname = "../maps/map1.txt"
+fname = "../maps/map2.txt"
 w = 0
 h = 0
 grid = None
@@ -114,8 +114,14 @@ with open(fname) as fp:
         for c in range(w):
             if grid[r][c] == 'S':
                 start = Cell(r, c)
+                grid[r][c] = 1
             elif grid[r][c] == 'F':
                 finish = Cell(r, c)
+                grid[r][c] = 1
+for r in range(h):
+    for c in range(w):
+        print(grid[r][c], end=' ')
+    print()
 
 ret = AStar(start, finish, grid)
 if ret:
